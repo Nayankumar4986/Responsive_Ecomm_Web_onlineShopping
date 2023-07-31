@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Ecommerce website</title>
+    <script
+      defer
+      src="https://use.fontawesome.com/releases/v5.15.4/js/all.js"
+      type="text/javascript"
+    ></script>
+    <link rel="stylesheet" href="style.css" />
+
+    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-database.js"></script>
+  </head>
+
+  <style>
+    .alert {
+      /* Initially hide the .alert div */
+      display: none;
+      position: fixed; /* Position the .alert div at the center of the viewport */
+      top: 30%; /* 10px below the bottom of the heading */
+      left: 50%;
+      transform: translate(
+        -50%,
+        -50%
+      ); /* Center the div horizontally and vertically */
+      background-color: #4c94f2;
+      border: 1px solid #000000;
+      border-radius: 3px;
+      padding: 10px;
+      z-index: 9999; /* Set a high z-index to ensure the .alert appears above other elements */
+    }
+  </style>
+
+  <body>
+    <section id="header">
+      <a href="#">
+        <img
+          src="image/Final.png"
+          class="logo"
+          height="70"
+          width="120"
+          alt=""
+        />
+      </a>
+      <div class="navcon1">
+        <ul id="navbar" class="click">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="shop.html">Shop</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a class="active" href="contact.html">Contact us</a></li>
+
+          <a href="#" id="close"><i class="fas fa-times"></i></a>
+        </ul>
+      </div>
+      <div class="navcon2">
+        <ul id="navbar" class="click">
+          <li>
+            <a href="#">
+              <i
+                class="fas fa-shopping-cart"
+                id="cart-icon"
+                data-quantity="0"
+                onclick="cartADD()"
+              ></i>
+            </a>
+          </li>
+        </ul>
+
+        <div class="newCart">
+          <h2 class="cart-title">Your cart</h2>
+          <!-- content -->
+          <div class="cart-content">
+            <div class="cart-box">
+              <img
+                src="image/T-shirt/Polo.png"
+                height="100"
+                alt=""
+                class="cart-img"
+              />
+              <div class="detail-box">
+                <div class="cart-product-title">POLO T-SHIRTS</div>
+                <div class="cart-price">$49</div>
+                <input
+                  type="number"
+                  name=""
+                  id=""
+                  value="0"
+                  class="cart-quantity"
+                  onchange="updateTotalPrice(event)"
+                />
+              </div>
+              <!-- remove item -->
+              <i
+                class="fas fa-trash cart-remove"
+                onclick="removeItem(event)"
+              ></i>
+            </div>
+          </div>
+          <!-- total -->
+          <div class="total">
+            <div class="total-title">Total</div>
+            <div id="total-price" class="total-price">$0</div>
+          </div>
+          <!-- buy button -->
+          <button type="button" class="btn-buy">Pay Now</button>
+          <!-- close cart -->
+          <i class="fas fa-times" id="close-cart" onclick="closCart()"></i>
+        </div>
+      </div>
+      <div id="mobile">
+        <a href="#">
+          <i
+            class="fas fa-shopping-cart"
+            id="cart-icon"
+            data-quantity="0"
+            onclick="cartADD()"
+          ></i>
+        </a>
+        <i id="bar" class="fas fa-outdent" onclick="slideNav()"></i>
+      </div>
+    </section>
+
+    <section id="page-header" class="about-header">
+      <h2>#let's_talk</h2>
+      <p>LEAVE A MESSAGE. We love to hear from you!</p>
+    </section>
+
+    <section id="contact-details" class="section-p1">
+      <div class="details">
+        <span>GET IN TOUCH</span>
+        <h2>Visit one of our agency locations or contact us today</h2>
+        <h3>Head Office</h3>
+        <div>
+          <li>
+            <i class="fas fa-map"></i>
+            <p>56 Glassford Street Glasgow G1 1UL New York</p>
+          </li>
+          <li>
+            <i class="fas fa-envelope"></i>
+            <p>contact@example.com</p>
+          </li>
+          <li>
+            <i class="fas fa-phone-alt"></i>
+            <p>contact@example.com</p>
+          </li>
+          <li>
+            <i class="fas fa-clock"></i>
+            <p>Monday to Saturday: 9:00am to 16:00pm</p>
+          </li>
+        </div>
+      </div>
+      <div class="map">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d185140.2317040243!2d77.1781550436993!3d28.549303089989056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd5b347eb62d%3A0x52c2b7494e204dce!2sNew%20Delhi%2C%20Delhi!5e0!3m2!1sen!2sin!4v1687709461580!5m2!1sen!2sin"
+          width="600"
+          height="450"
+          style="border: 0;"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
+    </section>
+
+    <section id="form-details">
+      <form id="contactForm">
+        <span>LEAVE A MESSAGE</span>
+        <h2>We love to hear from you</h2>
+        <div class="alert alert-success p-2 text-center" role="alert">
+          Form Submitted Successfully!
+        </div>
+        <input type="text" placeholder="Your name" name="name" id="name" />
+        <input type="text" placeholder="E-mail" name="email" id="email" />
+        <input type="text" placeholder="Subject" name="subject" id="subject" />
+        <textarea
+          name="message"
+          id="message"
+          cols="30"
+          rows="10"
+          placeholder="Your message"
+        ></textarea>
+        <button class="normal" type="submit">Submit</button>
+
+        <br />
+      </form>
+      <div class="people">
+        <div>
+          <img src="image/new/p1.png" alt="" height="100" width="100" />
+          <p>
+            <span>Ms. Selina</span>
+            Senior Marketing Manager
+            <br />
+            Phone: +000 123 000 77 88
+            <br />
+            Email: contact@example.com
+          </p>
+        </div>
+        <div>
+          <img src="image/new/p2.png" alt="" height="100" width="100" />
+          <p>
+            <span>William Smith</span>
+            Senior Marketing Manager
+            <br />
+            Phone: +000 123 000 77 88
+            <br />
+            Email: contact@example.com
+          </p>
+        </div>
+        <div>
+          <img src="image/new/p3.png" alt="" height="100" width="100" />
+          <p>
+            <span>John Sunia</span>
+            Senior Marketing Manager
+            <br />
+            Phone: +000 123 000 77 88
+            <br />
+            Email: contact@example.com
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="newsletter" class="section-p1 section-m1">
+      <div class="newstext">
+        <h4>Sign up For Newsletter</h4>
+        <p>
+          Get E-mail updates about our latest shop and
+          <span>special offers</span>
+        </p>
+      </div>
+      <div class="form">
+        <input type="text" placeholder="Your email address" />
+        <button>Sign up</button>
+      </div>
+    </section>
+
+    <footer class="section-p1">
+      <div class="col">
+        <img
+          class="logo"
+          src="image/Final.png"
+          alt=""
+          height="80"
+          width="100"
+        />
+        <h4>Contact</h4>
+        <p>
+          <strong>Address:</strong>
+          562 Wellington Road, Street 32 San Fransisco
+        </p>
+        <p>
+          <strong>Hours:</strong>
+          10:00 - 18:00, Mon - Sat
+        </p>
+        <div class="follow">
+          <h4>Follow us</h4>
+          <div class="icon">
+            <i class="fab fa-facebook-f"></i>
+            <i class="fab fa-twitter"></i>
+            <i class="fab fa-instagram"></i>
+            <i class="fab fa-pinterest-p"></i>
+            <i class="fab fa-youtube"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <h4>About</h4>
+        <a href="#">About us</a>
+        <a href="#">Delivery information</a>
+        <a href="#">Privacy policy</a>
+        <a href="#">Terms & conditions</a>
+        <a href="#">Contact us</a>
+      </div>
+
+      <div class="col">
+        <h4>My account</h4>
+        <a href="#">Sign In</a>
+        <a href="#">View Cart</a>
+        <a href="#">My wishlist</a>
+        <a href="#">Track My Order</a>
+        <a href="#">Help</a>
+      </div>
+
+      <div class="col install">
+        <h4>Install app</h4>
+        <p>From Google Play Store</p>
+        <div class="row">
+          <img src="image/new/n8.png" alt="" height="40" width="100" />
+          <img src="image/new/n9.png" alt="" height="40" width="100" />
+        </div>
+      </div>
+
+      <div class="copyright">
+        @2021, Tech2 etc - HTML CSS Ecommerce Template
+      </div>
+    </footer>
+
+    <script src="allJs/script.js"></script>
+    <script src="allJs/cart.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
